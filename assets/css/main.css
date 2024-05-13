@@ -1,0 +1,366 @@
+@import url('https://fonts.cdnfonts.com/css/motiva-sans');
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Motiva Sans', sans-serif;
+    background-color: #1b2939;
+}
+
+.header {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    background-color: #171a21;
+    height: 100px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.header-left a:not(.active) {
+    color: #dcdedf;
+}
+
+.header-left img {
+    width: 176px;
+    height: 44px;
+    opacity: 80%;
+}
+
+.header-right {
+    display: flex;
+    align-items: flex-start;
+    color: #b8b6b4;
+    margin-left: 60px;
+    font-size: 12px;
+}
+
+.header-right a {
+    color: #b8b6b4;
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style: none;
+    align-items: baseline;
+}
+
+.header-left ul li, .header-right ul li {
+    margin-left: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+}
+
+ul li a:not(.active):hover {
+    color: #fff;
+}
+
+.active {
+    color: #1a9fff;
+    position: relative;
+}
+
+.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 3px;
+    background-color: #1a9fff;
+    border-radius: 10px;
+    transform: scaleX(0);
+    transform-origin: bottom;
+    transition: 0.3s ease;
+}
+
+.active::after {
+    transform: scaleX(1);
+}
+
+.dropdown-content {
+    display: none;
+    /* margin-top: 10px; */
+    /* Talvez adicionar depois*/
+    position: absolute;
+    background-color: #3D4450;
+    z-index: 2;
+    padding: 0;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    color: #dcdedf;
+    text-transform: none;
+    margin-left: -10px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.btn-install {
+    background-color: #5c7e10;
+    padding: 5px;
+}
+
+.btn-install a {
+    color: #fff;
+    font-size: 12px;
+}
+
+.btn-install img {
+    margin-right: 3px;
+}
+
+.banner {
+    padding: 0;
+}
+
+.banner video {
+    width: 100%;
+}
+
+.floater-menu {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(62, 103, 150, 0.919) 11.38%, rgba(58, 120, 177, 0.8) 25.23%, rgb(15, 33, 110) 100%);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    align-items: center;
+    left: 0;
+    right: 0;
+    top: 130px;
+    height: 40px;
+    width: fit-content;
+    transform: translateX(50%);
+    padding: 0 5px 0 0;
+}
+
+.floater-menu-left > ul > li {
+    padding: 10px;
+}
+
+.floater-menu-left > ul > li:hover {
+    background: linear-gradient(to right, #3474CE, rgba(52, 116, 206, 0.1));
+}
+
+.floater-menu-left a {
+    font-size: 13px;
+    color: #e5e5e5;
+    text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+.floater-menu-right {
+    background-color: #316282;
+    width: fit-content;
+    border: 1px solid #22445b;
+    border-radius: 3px;
+    box-shadow: 1px 1px 0 #42508e;
+}
+
+.floater-menu-right:hover {
+    border-color: #559fcb;
+}
+
+.floater-menu-right input {
+    background-color: transparent;
+    padding: 8px;
+    border: none;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.floater-menu-right input::placeholder {
+    color: #162a37;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.floater-menu-right input:focus {
+    outline: 0;
+}
+
+.floater-menu-right a {
+    background-color: #559fcb;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.dropdown-2-content {
+    display: none;
+    position: absolute;
+    background: linear-gradient(90deg, rgba(33, 162, 255, 0.1) 1.89%, rgba(50, 50, 51, 0) 50%), linear-gradient(180deg, #575860 11.6%, #3A4852 54.73%, #2C2D34 100%);
+    z-index: 2;
+    box-shadow: 0 0 12px #000;
+}
+
+.dropdown-2-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    color: #dcdedf;
+    text-transform: none;
+    margin-left: -10px;
+}
+
+.dropdown-2-content a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+}
+
+.dropdown-2:hover .dropdown-2-content {
+    display: block;
+}
+
+.main {
+    width: 100%;
+    height: 900px;
+    margin-top: 30px;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.categorias {
+    width: 240px;
+    font-size: 13px;
+    border: 1px solid #fff;
+    padding: 8px;
+    margin-left: -150px;
+}
+
+.carroussel-main-container {
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: visible;
+    position: relative;
+}
+
+.carroussel-main {
+    width: 940px;
+    height: 350px;
+    margin-left: 50px;
+    box-shadow: 0 0 12px #000;
+    display: flex;
+    flex-direction: row;
+    background-image: url('../img/carroussel-bg.jpg');
+    background-size: cover;
+}
+
+.carroussel-main-img {
+    width: 600px;
+    height: 100%;
+    box-shadow: 0 0 3px #000;
+    /* overflow: hidden; */
+}
+
+.carroussel-main-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.carroussel-main-information {
+    padding: 3px;
+}
+
+.carroussel-main-information-title {
+    color: #fff;
+    font-size: 24px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.carroussel-main-information-imgs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 325px;
+}
+
+.carroussel-main-information-imgs img {
+    width: calc(50% - 5px);
+    margin-bottom: 10px;
+    filter: brightness(0.8);
+}
+
+.carroussel-main-information-imgs img:hover {
+    filter: brightness(1);
+}
+
+.carroussel-main-information-subtitle {
+    color: #fff;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+.carroussel-main-information-card {
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #394148;
+    font-size: 12px;
+    color: #fff;
+    width: fit-content;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.carroussel-main-information-bottom {
+    color: #fff;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.game-popup {
+    width: 340px;
+    height: 320px;
+    background-color: #e5e5e5;
+    box-shadow: 0 0 12px #000;
+    position: absolute;
+    left: 995px;
+}
+
+.arrow {
+    margin-left: -12px;
+    margin-top: 20px;
+}
