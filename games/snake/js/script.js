@@ -70,3 +70,5 @@ document.addEventListener("keydown", ({ key }) => {
         direction = "down"
     }
 })
+
+// https://www.youtube.com/watch?v=LyWSsZktVOg
