@@ -5,11 +5,16 @@ const score = document.querySelector('.score-value')
 const finalScore = document.querySelector('.final-score > span')
 const menu = document.querySelector('.menu')
 const buttonPlay = document.querySelector('.btn-play')
+const buttonHard = document.querySelector('.btn-hard')
 
-const audio = new Audio('./assets/audio.mp3')
+const food_audio = new Audio('./assets/audio.mp3')
+const move_audio = new Audio('./assets/move.mp3')
+const gameover_audio = new Audio('./assets/gameover.mp3')
 
 const size = 30;
 
+let speed = 150
+let gameIsOver = false
 let snake = [
     { x: 270, y: 300 },
     { x: 300, y: 300 }
@@ -45,7 +50,6 @@ const food = {
 let direction, loopId
 
 const drawFood = () => {
-
     const { x, y, color } = food
 
     ctx.shadowColor = color
@@ -111,7 +115,7 @@ const checkEat = () => {
     if (head.x == food.x && head.y == food.y) {
         snake.push(head)
         incrementScore()
-        audio.play()
+        food_audio.play()
 
         let x = randomPosition()
         let y = randomPosition()
@@ -129,8 +133,8 @@ const checkEat = () => {
 
 const checkCollision = () => {
     const head = snake[snake.length - 1]
-    const canvasLimit = canvas.width - size
     const neckIndex = snake.length - 2
+    const canvasLimit = canvas.width - size
 
     const wallCollision = head.x < 0 || head.x > canvasLimit || head.y < 0 || head.y > canvasLimit
 
@@ -139,7 +143,11 @@ const checkCollision = () => {
     })
 
     if (wallCollision || selfCollision) {
-        gameOver()
+        if (!gameIsOver) {
+            gameIsOver = true
+            gameover_audio.play()
+            gameOver()
+        }
     }
 }
 
@@ -152,6 +160,7 @@ const gameOver = () => {
 }
 
 const gameLoop = () => {
+    if (gameIsOver) return
     clearInterval(loopId)
     ctx.clearRect(0, 0, 600, 600)
 
@@ -162,25 +171,33 @@ const gameLoop = () => {
     checkEat()
     checkCollision()
 
-    loopId = setTimeout(() => {
-        gameLoop()
-    }, 200)
+    loopId = setTimeout(gameLoop, speed)
 }
 
 gameLoop()
 
 document.addEventListener("keydown", ({ key }) => {
+    let newDirection
+
     if (key == "ArrowRight" && direction != 'left') {
-        direction = "right"
+        newDirection = "right"
     }
     if (key == "ArrowLeft" && direction != 'right') {
-        direction = "left"
+        newDirection = "left"
     }
     if (key == "ArrowUp" && direction != 'down') {
-        direction = "up"
+        newDirection = "up"
     }
     if (key == "ArrowDown" && direction != 'up') {
-        direction = "down"
+        newDirection = "down"
+    }
+    if (key == "Escape") {
+        newDirection = undefined
+    }
+
+    if (newDirection !== direction) {
+        direction = newDirection
+        move_audio.play()
     }
 })
 
@@ -197,4 +214,31 @@ buttonPlay.addEventListener('click', () => {
     food.x = randomPosition()
     food.y = randomPosition()
     food.color = randomColor()
+
+    gameIsOver = false
+
+    speed = 150
+    clearTimeout(loopId)
+    gameLoop()
+})
+
+buttonHard.addEventListener('click', () => {
+    score.innerText = '00'
+    menu.style.display = 'none'
+    canvas.style.filter = 'none'
+
+    snake = [
+        { x: 270, y: 300},
+        { x: 300, y: 300}
+    ]
+
+    food.x = randomPosition()
+    food.y = randomPosition()
+    food.color = randomColor()
+
+    gameIsOver = false
+
+    speed = 70
+    clearTimeout(loopId); // Garanta que não há nenhum outro loop rodando
+    gameLoop()
 })

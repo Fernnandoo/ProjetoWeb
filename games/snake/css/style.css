@@ -68,3 +68,18 @@ canvas {
     gap: 5px;
     cursor: pointer;
 }
+
+.btn-hard {
+    border: none;
+    border-radius: 100px;
+    padding: 10px 15px 10px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+}
