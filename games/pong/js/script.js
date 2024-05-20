@@ -2,7 +2,7 @@ const audio_score = new Audio('./assets/score.mp3')
 const audio_hit = new Audio('./assets/hit.mp3')
 const audio_wall = new Audio('./assets/wall.mp3')
 
-// Global Variables
+// Variáveis globais de direção
 var DIRECTION = {
     IDLE: 0,
     UP: 1,
@@ -12,9 +12,8 @@ var DIRECTION = {
 };
  
 var rounds = [5, 5, 3, 3, 2];
-var colors = ['#1abc9c', '#2ecc71', '#3498db', '#8c52ff', '#9b59b6'];
+var colors = ['#1abc9c', '#2ecc71', '#3498db', '#8c52ff', '#9b59b6']; // Cores para o fundo do jogo
  
-// The ball object (The cube that bounces back and forth)
 var Ball = {
     new: function (incrementedSpeed) {
         return {
@@ -29,7 +28,7 @@ var Ball = {
     }
 };
  
-// The ai object (The two lines that move up and down)
+// 'Inteligência artificial' que joga no lado direito
 var Ai = {
     new: function (side) {
         return {
@@ -44,6 +43,7 @@ var Ai = {
     }
 };
  
+// Função principal que contem a maior parte dos elementos do jogo
 var Game = {
     initialize: function () {
         this.canvas = document.querySelector('canvas');
@@ -69,12 +69,12 @@ var Game = {
         Pong.listen();
     },
  
+    // Função para fim de jogo
     endGameMenu: function (text) {
-        // Change the canvas font size and color
         Pong.context.font = '45px Courier New';
         Pong.context.fillStyle = this.color;
  
-        // Draw the rectangle behind the 'Press any key to begin' text.
+        // Desenha um retangulo atras da mensagem 'Pressione uma tecla para começar'
         Pong.context.fillRect(
             Pong.canvas.width / 2 - 350,
             Pong.canvas.height / 2 - 48,
@@ -82,10 +82,10 @@ var Game = {
             100
         );
  
-        // Change the canvas color;
+        // Altera a cor do canvas
         Pong.context.fillStyle = '#ffffff';
  
-        // Draw the end game menu text ('Game Over' and 'Winner')
+        // Desenha o texto 'Winner' ou 'Game Over'
         Pong.context.fillText(text,
             Pong.canvas.width / 2,
             Pong.canvas.height / 2 + 15
@@ -98,14 +98,13 @@ var Game = {
     },
  
     menu: function () {
-        // Draw all the Pong objects in their current state
+        // Desenhas todos objetos de Pong
         Pong.draw();
  
-        // Change the canvas font size and color
         this.context.font = '50px Courier New';
         this.context.fillStyle = this.color;
  
-        // Draw the rectangle behind the 'Press any key to begin' text.
+        // Desenha um retangulo atras da mensagem 'Pressione uma tecla para começar'
         this.context.fillRect(
             this.canvas.width / 2 - 350,
             this.canvas.height / 2 - 48,
@@ -113,20 +112,21 @@ var Game = {
             100
         );
  
-        // Change the canvas color;
         this.context.fillStyle = '#ffffff';
  
-        // Draw the 'press any key to begin' text
+        // Desenha a mensagem 'Pressione uma tecla para começar'
         this.context.fillText('Pressione uma tecla para começar',
             this.canvas.width / 2,
             this.canvas.height / 2 + 15
         );
     },
  
-    // Update all objects (move the player, ai, ball, increment the score, etc.)
+    // Atualiza todos os objetos (move o jogador, bot, bola, aumenta a pontuação, etc)
     update: function () {
         if (!this.over) {
-            // If the ball collides with the bound limits - correct the x and y coords.
+             // If the ball collides with the bound limits - correct the x and y coords.
+
+            // Se a bola colidir com os limites estabelecidos, corrija as coordenadas X e Y
             if (this.ball.x <= 0) {
                 Pong._resetTurn.call(this, this.ai, this.player);
                 audio_score.play()
@@ -144,12 +144,12 @@ var Game = {
                 audio_wall.play()
             }
  
-            // Move player if they player.move value was updated by a keyboard event
+            // Se o valor de player.move for atualizado, mova o jogador
             if (this.player.move === DIRECTION.UP) this.player.y -= this.player.speed;
             else if (this.player.move === DIRECTION.DOWN) this.player.y += this.player.speed;
  
-            // On new serve (start of each turn) move the ball to the correct side
-            // and randomize the direction to add some challenge.
+            /* No inicio de um novo turno, mova a bola para a direção correta
+               e faça com que o local em que a bola aparece seja aleatório */
             if (Pong._turnDelayIsOver.call(this) && this.turn) {
                 this.ball.moveX = this.turn === this.player ? DIRECTION.LEFT : DIRECTION.RIGHT;
                 this.ball.moveY = [DIRECTION.UP, DIRECTION.DOWN][Math.round(Math.random())];
@@ -157,17 +157,17 @@ var Game = {
                 this.turn = null;
             }
  
-            // If the player collides with the bound limits, update the x and y coords.
+            // Se o jogador colidir com os limites estabelecidos, corrja a posição X e Y
             if (this.player.y <= 0) this.player.y = 0;
             else if (this.player.y >= (this.canvas.height - this.player.height)) this.player.y = (this.canvas.height - this.player.height);
  
-            // Move ball in intended direction based on moveY and moveX values
+            // Mova a bola com base nos valores X e Y
             if (this.ball.moveY === DIRECTION.UP) this.ball.y -= (this.ball.speed / 1.5);
             else if (this.ball.moveY === DIRECTION.DOWN) this.ball.y += (this.ball.speed / 1.5);
             if (this.ball.moveX === DIRECTION.LEFT) this.ball.x -= this.ball.speed;
             else if (this.ball.moveX === DIRECTION.RIGHT) this.ball.x += this.ball.speed;
  
-            // Handle ai (AI) UP and DOWN movement
+            // Movimentos de subir e descer do bot
             if (this.ai.y > this.ball.y - (this.ai.height / 2)) {
                 if (this.ball.moveX === DIRECTION.RIGHT) this.ai.y -= this.ai.speed / 1.5;
                 else this.ai.y -= this.ai.speed / 4;
@@ -177,11 +177,11 @@ var Game = {
                 else this.ai.y += this.ai.speed / 4;
             }
  
-            // Handle ai (AI) wall collision
+            // Lida com a colisão do bot
             if (this.ai.y >= this.canvas.height - this.ai.height) this.ai.y = this.canvas.height - this.ai.height;
             else if (this.ai.y <= 0) this.ai.y = 0;
  
-            // Handle Player-Ball collisions
+            // Lida com a colisão do jogador
             if (this.ball.x - this.ball.width <= this.player.x && this.ball.x >= this.player.x - this.player.width) {
                 if (this.ball.y <= this.player.y + this.player.height && this.ball.y + this.ball.height >= this.player.y) {
                     this.ball.x = (this.player.x + this.ball.width);
@@ -191,7 +191,7 @@ var Game = {
                 }
             }
  
-            // Handle ai-ball collision
+            // Lida com a colisão da bola com o bot
             if (this.ball.x - this.ball.width <= this.ai.x && this.ball.x >= this.ai.x - this.ai.width) {
                 if (this.ball.y <= this.ai.y + this.ai.height && this.ball.y + this.ball.height >= this.ai.y) {
                     this.ball.x = (this.ai.x - this.ball.width);
@@ -202,16 +202,14 @@ var Game = {
             }
         }
  
-        // Handle the end of round transition
-        // Check to see if the player won the round.
+        // Verifica se o jogador venceu o round
         if (this.player.score === rounds[this.round]) {
-            // Check to see if there are any more rounds/levels left and display the victory screen if
-            // there are not.
+            // Verifica se há mais rounds restantes, se não houver, exiba a mensagem de vencedor
             if (!rounds[this.round + 1]) {
                 this.over = true;
                 setTimeout(function () { Pong.endGameMenu('Vencedor'); }, 1000);
             } else {
-                // If there is another round, reset all the values and increment the round number.
+                // Se houver outro round, resete todos os valores e incremente o número do round
                 this.color = this._generateRoundColor();
                 this.player.score = this.ai.score = 0;
                 this.player.speed += 0.5;
@@ -221,16 +219,16 @@ var Game = {
  
             }
         }
-        // Check to see if the ai/AI has won the round.
+        // Verifica se o bot ganhou o round
         else if (this.ai.score === rounds[this.round]) {
             this.over = true;
             setTimeout(function () { Pong.endGameMenu('Fim de jogo'); }, 1000);
         }
     },
  
-    // Draw the objects to the canvas element
+    // Desenha os objetos no canva
     draw: function () {
-        // Clear the Canvas
+        // Limpa o canvas
         this.context.clearRect(
             0,
             0,
@@ -238,10 +236,9 @@ var Game = {
             this.canvas.height
         );
  
-        // Set the fill style to black
         this.context.fillStyle = this.color;
  
-        // Draw the background
+        // Desenha o fundo
         this.context.fillRect(
             0,
             0,
@@ -249,10 +246,10 @@ var Game = {
             this.canvas.height
         );
  
-        // Set the fill style to white (For the paddles and the ball)
+        // Define o estilo da bola e dos jogadores
         this.context.fillStyle = '#ffffff';
  
-        // Draw the Player
+        // Desenha o jogador
         this.context.fillRect(
             this.player.x,
             this.player.y,
@@ -260,7 +257,7 @@ var Game = {
             this.player.height
         );
  
-        // Draw the Ai
+        // Desenha o bot
         this.context.fillRect(
             this.ai.x,
             this.ai.y,
@@ -268,7 +265,7 @@ var Game = {
             this.ai.height 
         );
  
-        // Draw the Ball
+        // Desenha a bola
         if (Pong._turnDelayIsOver.call(this)) {
             this.context.fillRect(
                 this.ball.x,
@@ -278,7 +275,7 @@ var Game = {
             );
         }
  
-        // Draw the net (Line in the middle)
+        // Desenha a linha do centro
         this.context.beginPath();
         this.context.setLineDash([7, 15]);
         this.context.moveTo((this.canvas.width / 2), this.canvas.height - 140);
@@ -287,38 +284,35 @@ var Game = {
         this.context.strokeStyle = '#ffffff';
         this.context.stroke();
  
-        // Set the default canvas font and align it to the center
         this.context.font = '100px Courier New';
         this.context.textAlign = 'center';
  
-        // Draw the players score (left)
+        // Desenha a pontuação do jogador
         this.context.fillText(
             this.player.score.toString(),
             (this.canvas.width / 2) - 300,
             200
         );
  
-        // Draw the paddles score (right)
+        // Desenha a pontuação do bot
         this.context.fillText(
             this.ai.score.toString(),
             (this.canvas.width / 2) + 300,
             200
         );
  
-        // Change the font size for the center score text
         this.context.font = '30px Courier New';
  
-        // Draw the winning score (center)
+        // Desenha o round
         this.context.fillText(
             'Round ' + (Pong.round + 1),
             (this.canvas.width / 2),
             35
         );
  
-        // Change the font size for the center score value
         this.context.font = '40px Courier';
  
-        // Draw the current round number
+        // Desenha o valor do round atual
         this.context.fillText(
             rounds[Pong.round] ? rounds[Pong.round] : rounds[Pong.round - 1],
             (this.canvas.width / 2),
@@ -330,30 +324,30 @@ var Game = {
         Pong.update();
         Pong.draw();
  
-        // If the game is not over, draw the next frame.
+        // Se o jogo não acabou, desenha o próximo quadro
         if (!Pong.over) requestAnimationFrame(Pong.loop);
     },
  
     listen: function () {
         document.addEventListener('keydown', function (key) {
-            // Handle the 'Press any key to begin' function and start the game.
+            // Função para iniciar o jogo ao pressionar uma tecla
             if (Pong.running === false) {
                 Pong.running = true;
                 window.requestAnimationFrame(Pong.loop);
             }
  
-            // Handle up arrow and w key events
+            // Evento de teclas ArrowUp e W
             if (key.keyCode === 38 || key.keyCode === 87) Pong.player.move = DIRECTION.UP;
  
-            // Handle down arrow and s key events
+            // Evento de teclas ArrowDown e S
             if (key.keyCode === 40 || key.keyCode === 83) Pong.player.move = DIRECTION.DOWN;
         });
  
-        // Stop the player from moving when there are no keys being pressed.
+        // para o movimento do jogador se não houver tecla pressionada
         document.addEventListener('keyup', function (key) { Pong.player.move = DIRECTION.IDLE; });
     },
  
-    // Reset the ball location, the player turns and set a delay before the next round begins.
+    // Redefine a localização dos elementos e da um pequeno delay antes de começar o próximo round
     _resetTurn: function(victor, loser) {
         this.ball = Ball.new.call(this, this.ball.speed);
         this.turn = loser;
@@ -362,12 +356,12 @@ var Game = {
         victor.score++;
     },
  
-    // Wait for a delay to have passed after each turn.
+    // Delay entre cada turno
     _turnDelayIsOver: function() {
         return ((new Date()).getTime() - this.timer >= 1000);
     },
  
-    // Select a random color as the background of each level/round.
+    // Seleciona uma cor aleatória para o fundo a cada round/level
     _generateRoundColor: function () {
         var newColor = colors[Math.floor(Math.random() * colors.length)];
         if (newColor === this.color) return Pong._generateRoundColor();
