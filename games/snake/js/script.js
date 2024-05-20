@@ -201,6 +201,30 @@ const gameLoop = () => {
 
 gameLoop()
 
+document.addEventListener('touchstart', (event) => {
+    var initialX = event.touches[0].clientX
+    var initialY = event.touches[0].clientY
+
+    document.addEventListener('touchmove', (event) => {
+        var touchX = event.touches[0].clientX
+        var touchY = event.touches[0].clientY
+    
+        if (touchX > initialX || direction != "left") {
+            direction = "right"
+        }
+        if (touchX < initialX || direction != "right") {
+            direction = "left"
+        }
+        // if (touchY < initialY || direction != "down") {
+        //     direction = "up"
+        // }
+        // if (touchY > initialY || direction != "up") {
+        //     direction = "down"
+        // }
+    })
+})
+
+
 // Eventos de tecla que afetam a direção de movimento
 document.addEventListener("keydown", ({ key }) => {
     let newDirection
