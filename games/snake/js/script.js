@@ -1,38 +1,45 @@
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
+const canvas = document.querySelector('canvas') // Elemento canvas retirado do html
+const ctx = canvas.getContext('2d') // Contexto dos elementos no canvas
 
+// Elementos retirados do html
 const score = document.querySelector('.score-value')
 const finalScore = document.querySelector('.final-score > span')
 const menu = document.querySelector('.menu')
 const buttonPlay = document.querySelector('.btn-play')
 const buttonHard = document.querySelector('.btn-hard')
 
+// Aúdios
 const food_audio = new Audio('./assets/audio.mp3')
 const move_audio = new Audio('./assets/move.mp3')
 const gameover_audio = new Audio('./assets/gameover.mp3')
 
-const size = 30;
+const size = 30; // Tamanho para cada célula
 
-let speed = 150
-let gameIsOver = false
+let speed = 150 // Velocidade de movimento
+let gameIsOver = false // Variável de controle de estado, falso por padrão
+// Posição inicial da cobra
 let snake = [
     { x: 270, y: 300 },
     { x: 300, y: 300 }
 ]
 
+// Função para incrementar a pontuação
 const incrementScore = () => {
     score.innerText = parseInt(score.innerText) + 10
 }
 
+// Função para gerar um número inteiro aleatório, com valores mínimos e máximos
 const randomNumber = (min, max) => {
     return Math.round(Math.random() * (max - min) + min)
 }
 
+// Função para randomizar posições X e Y
 const randomPosition = () => {
     const number = randomNumber(0, canvas.width - size)
     return Math.round(number / size) * size
 }
 
+// Função para gerar uma cor rgb aleatória
 const randomColor = () => {
     const red = randomNumber(0, 255)
     const green = randomNumber(0, 255)
@@ -49,6 +56,8 @@ const food = {
 
 let direction, loopId
 
+
+// Desenha a comida
 const drawFood = () => {
     const { x, y, color } = food
 
@@ -59,20 +68,25 @@ const drawFood = () => {
     ctx.shadowBlur = 0
 }
 
+// Desenha a cobra
 const drawSnake = () => {
     ctx.fillStyle = '#c5c5c5'
 
+    // Obtem a posição da cabeça e a colore com uma cor diferente
     snake.forEach((position, index) => {
         if (index == snake.length - 1) {
             ctx.fillStyle = '#e5e5e5'
         }
 
-        ctx.fillRect(position.x, position.y, size, size)
+        ctx.fillRect(position.x, position.y, size, size) // Desenha a cobra de fato
     })
 }
 
+// Função responsável pela movimentação da cobra
 const moveSnake = () => {
+    // Para evitar processamento desnecessário, a função é encerrada caso nenhuma direção seja acionada
     if (!direction) return
+
     const head = snake[snake.length - 1]
 
     if (direction == "right") {
@@ -91,16 +105,20 @@ const moveSnake = () => {
     snake.shift()
 }
 
+// Desenha os quadrados do tabuleiro
 const drawGrid = () => {
     ctx.lineWidth = 1
     ctx.strokeStyle = '#191919'
 
-    for (i = 30; i < canvas.width; i += 30) {
-        ctx.beginPath()
+    // Percorre todo o tamanho do canvas, desenhando uma linha a cada 30px
+    for (i = size; i < canvas.width; i += size) {
+        // Desenha as linhas horizontais
+        ctx.beginPath() // Define que o caminho deve ser recomeçado, para evitar conflitos com o loop
         ctx.lineTo(i, 0)
         ctx.lineTo(i, 600)
         ctx.stroke()
 
+        // Desenha as linhas verticais
         ctx.beginPath()
         ctx.lineTo(0, i)
         ctx.lineTo(600, i)
@@ -109,9 +127,11 @@ const drawGrid = () => {
 
 }
 
+// Verifica se a cobra passou pelo espaço em que a comida estava
 const checkEat = () => {
     const head = snake[snake.length - 1]
 
+    // Verifica se as posições da cabeça e da comida são equivalentes
     if (head.x == food.x && head.y == food.y) {
         snake.push(head)
         incrementScore()
@@ -120,20 +140,23 @@ const checkEat = () => {
         let x = randomPosition()
         let y = randomPosition()
 
+        // Garante que a nova comida não apareça em uma posição em que a cobra já está
         while (snake.find((position) => position.x == x && position.y == y)) {
             x = randomPosition()
             y = randomPosition()
         }
 
+        // Gera novos valores para a comida que será gerada a seguir
         food.x = x
         food.y = y
         food.color = randomColor()
     }
 }
 
+// Verifica se houve uma colisão
 const checkCollision = () => {
     const head = snake[snake.length - 1]
-    const neckIndex = snake.length - 2
+    const neckIndex = snake.length - 2 // Necessário para evitar conflitos com o array como um todo
     const canvasLimit = canvas.width - size
 
     const wallCollision = head.x < 0 || head.x > canvasLimit || head.y < 0 || head.y > canvasLimit
@@ -151,6 +174,7 @@ const checkCollision = () => {
     }
 }
 
+// Encerra o movimento e exibe menu de game over
 const gameOver = () => {
     direction = undefined
 
@@ -159,6 +183,7 @@ const gameOver = () => {
     canvas.style.filter = 'blur(5px)'
 }
 
+// Chama as demais funções e faz um loop que garante o funcionamento do jogo
 const gameLoop = () => {
     if (gameIsOver) return
     clearInterval(loopId)
@@ -176,6 +201,7 @@ const gameLoop = () => {
 
 gameLoop()
 
+// Eventos de tecla que afetam a direção de movimento
 document.addEventListener("keydown", ({ key }) => {
     let newDirection
 
@@ -201,6 +227,7 @@ document.addEventListener("keydown", ({ key }) => {
     }
 })
 
+// Evento de click para recomeçar o jogo
 buttonPlay.addEventListener('click', () => {
     score.innerText = '00'
     menu.style.display = 'none'
@@ -222,6 +249,7 @@ buttonPlay.addEventListener('click', () => {
     gameLoop()
 })
 
+// Evento de click para recomeçar o jogo, dessa vez em uma dificuldade maior
 buttonHard.addEventListener('click', () => {
     score.innerText = '00'
     menu.style.display = 'none'
@@ -239,6 +267,6 @@ buttonHard.addEventListener('click', () => {
     gameIsOver = false
 
     speed = 70
-    clearTimeout(loopId); // Garanta que não há nenhum outro loop rodando
+    clearTimeout(loopId);
     gameLoop()
 })
