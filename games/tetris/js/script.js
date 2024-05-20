@@ -466,7 +466,7 @@ function MoveAllRowsDown(rowsToDelete, startOfDeletion){
             if (typeof square === 'string')
             {
                 nextSquare = square;
-                gameBoardArray[x][y2] = 1; // Coloco o bloco no array do tabuleiro
+                gameBoardArray[x][y2] = 1; // Coloca o bloco no array do tabuleiro
                 stoppedShapeArray[x][y2] = square; // Desenha a cor no array de peças paradas
  
                 // Procura o valor de X e Y no array de coordenadas
