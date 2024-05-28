@@ -122,17 +122,19 @@ function moveSnake() {
     const head = snake[snake.length - 1]
 
     // Verifica a variável direction e move a cobra de acordo com ela, sempre adicionando um item à última posição do array
-    if (direction == "right") {
-        snake.push({ x: head.x + size, y: head.y })
-    }
-    if (direction == "left") {
-        snake.push({ x: head.x - size, y: head.y })
-    }
-    if (direction == "up") {
-        snake.push({ x: head.x, y: head.y - size })
-    }
-    if (direction == "down") {
-        snake.push({ x: head.x, y: head.y + size })
+    switch (direction) {
+        case "right":
+            snake.push({ x: head.x + size, y: head.y })
+            break
+        case "left":
+            snake.push({ x: head.x - size, head.y })
+            break
+        case "up":
+            snake.push({ x: head.x, y: head.y - size })
+            break
+        case "down":
+            snake.push({ x: head.x, head.y + size })
+            break
     }
 
     // Remove a primeira posição do array para que a cobra de fato se mova
