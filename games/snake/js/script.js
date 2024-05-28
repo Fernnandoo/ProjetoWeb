@@ -1,7 +1,10 @@
 const canvas = document.querySelector('canvas') // Elemento canvas retirado do html
 const ctx = canvas.getContext('2d') // Contexto dos elementos no canvas
 
+// Áudios a serem utilizados 
+const moveAudio = new Audio('./assets/move.mp3')
 const eatAudio = new Audio('./assets/audio.mp3')
+const overAudio = new Audio('./assets/gameover.mp3')
 
 // Elementos retirados do html
 const score = document.querySelector('.score-value')
@@ -130,13 +133,13 @@ function moveSnake() {
             snake.push({ x: head.x + size, y: head.y })
             break
         case "left":
-            snake.push({ x: head.x - size, head.y })
+            snake.push({ x: head.x - size, y: head.y })
             break
         case "up":
             snake.push({ x: head.x, y: head.y - size })
             break
         case "down":
-            snake.push({ x: head.x, head.y + size })
+            snake.push({ x: head.x, y: head.y + size })
             break
     }
 
@@ -211,6 +214,7 @@ function checkCollision() {
 
     // Verifica de fato se houve uma colisão de qualquer tipo
     if (wallCollision || selfCollision) {
+        overAudio.play()
         // Verifica se o jogo já está encerrado, se não estiver, encerra
         if (!gameIsOver) {
             gameIsOver = true
@@ -277,6 +281,7 @@ document.addEventListener("keydown", ({ key }) => {
 
     if (newDirection !== direction) {
         direction = newDirection
+        moveAudio.play()
     }
 })
 
