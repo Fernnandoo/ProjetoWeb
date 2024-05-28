@@ -1,6 +1,8 @@
 const canvas = document.querySelector('canvas') // Elemento canvas retirado do html
 const ctx = canvas.getContext('2d') // Contexto dos elementos no canvas
 
+const eatAudio = new Audio('./assets/audio.mp3')
+
 // Elementos retirados do html
 const score = document.querySelector('.score-value')
 const finalScore = document.querySelector('.final-score > span')
@@ -27,6 +29,7 @@ class Score {
         this.scoreValue += 10
         sessionStorage.setItem('score', this.scoreValue)
         score.innerText = sessionStorage.getItem('score') // Exibe o texto da pontuação como sendo o valor alocado no session storage
+        eatAudio.play()
     }
 
     // Método que limpa o session storage a cada vez jogada
